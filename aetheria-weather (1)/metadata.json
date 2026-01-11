@@ -1,0 +1,7 @@
+{
+  "name": "Aetheria Weather",
+  "description": "A high-performance, AI-powered weather dashboard featuring real-time insights, interactive data visualizations, and personalized activity recommendations using Gemini 3.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}

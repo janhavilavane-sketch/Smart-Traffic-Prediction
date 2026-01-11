@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Traffic Prediction | AI Future</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #05070a;
+            --accent-color: #00f2fe;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --red-light: #ff4757;
+            --yellow-light: #eccc68;
+            --green-light: #2ed573;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: white;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        /* --- BACKGROUND ANIMATION --- */
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, #111827 0%, #05070a 100%);
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .grid-plane {
+            position: absolute;
+            width: 200%;
+            height: 100%;
+            bottom: 0;
+            left: -50%;
+            background-image: 
+                linear-gradient(rgba(0, 242, 254, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 254, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            transform: perspective(500px) rotateX(60deg);
+            animation: moveGrid 5s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes moveGrid {
+            0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
+            100% { transform: perspective(500px) rotateX(60deg) translateY(50px); }
+        }
+
+        /* --- TRAFFIC LIGHT SYMBOL --- */
+        .traffic-light-container {
+            margin-top: 50px;
+            display: flex;
+            gap: 15px;
+            background: #222;
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: 2px solid #333;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
+        }
+
+        .light {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            opacity: 0.3;
+        }
+
+        .red { background: var(--red-light); animation: glowRed 3s infinite; }
+        .yellow { background: var(--yellow-light); animation: glowYellow 3s infinite 1s; }
+        .green { background: var(--green-light); animation: glowGreen 3s infinite 2s; }
+
+        @keyframes glowRed { 0%, 33% { opacity: 1; box-shadow: 0 0 15px var(--red-light); } 34%, 100% { opacity: 0.3; } }
+        @keyframes glowYellow { 0%, 33% { opacity: 0.3; } 34%, 66% { opacity: 1; box-shadow: 0 0 15px var(--yellow-light); } 67%, 100% { opacity: 0.3; } }
+        @keyframes glowGreen { 0%, 66% { opacity: 0.3; } 67%, 100% { opacity: 1; box-shadow: 0 0 15px var(--green-light); } }
+
+        /* --- CONTENT SECTION --- */
+        .container {
+            text-align: center;
+            z-index: 10;
+            margin-top: 20px;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(180deg, #fff 30%, var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--accent-color);
+            letter-spacing: 4px;
+            margin-bottom: 60px;
+            opacity: 0.8;
+        }
+
+        /* --- BUTTONS --- */
+        .button-group {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .glass-btn {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            padding: 20px;
+            border-radius: 20px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 160px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .glass-btn:hover {
+            background: rgba(0, 242, 254, 0.1);
+            transform: translateY(-15px) scale(1.05);
+            border-color: var(--accent-color);
+            box-shadow: 0 20px 40px rgba(0, 242, 254, 0.2);
+        }
+
+        /* --- THE ROAD --- */
+        .highway {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 100px;
+            background: #0f1218;
+            border-top: 4px solid #222;
+            overflow: hidden;
+        }
+
+        .highway::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: repeating-linear-gradient(90deg, transparent, transparent 50px, #444 50px, #444 100px);
+            top: 50%;
+            animation: roadMove 0.6s linear infinite;
+        }
+
+        @keyframes roadMove {
+            from { background-position: 0; }
+            to { background-position: -100px; }
+        }
+
+        .car {
+            position: absolute;
+            width: 60px;
+            height: 25px;
+            border-radius: 5px 15px 5px 5px;
+            z-index: 5;
+        }
+
+        .car.one { animation: drive 3s linear infinite; bottom: 10px; background: var(--red-light); box-shadow: 0 0 15px var(--red-light); }
+        .car.two { animation: drive 5s linear infinite 1s; bottom: 60px; background: var(--accent-color); box-shadow: 0 0 15px var(--accent-color); }
+        .car.three { animation: drive 4s linear infinite 0.5s; bottom: 35px; background: var(--yellow-light); box-shadow: 0 0 15px var(--yellow-light); }
+
+        @keyframes drive {
+            from { left: -100px; }
+            to { left: 110%; }
+        }
+
+        .robot-head {
+            width: 25px; height: 20px;
+            background: white; border-radius: 5px;
+            position: relative; animation: bob 2s infinite;
+        }
+        .robot-head::before, .robot-head::after {
+            content: ""; position: absolute; top: 6px; 
+            width: 4px; height: 4px; background: #00f2fe; border-radius: 50%;
+        }
+        .robot-head::before { left: 5px; } .robot-head::after { right: 5px; }
+        @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
+    </style>
+</head>
+<body>
+
+    <div class="hero-bg">
+        <div class="grid-plane"></div>
+    </div>
+
+    <div class="traffic-light-container">
+        <div class="light red"></div>
+        <div class="light yellow"></div>
+        <div class="light green"></div>
+    </div>
+
+    <div class="container">
+        <h1>Smart Traffic Prediction</h1>
+        <p class="subtitle">Smart Prediction. Real-Time Flow. Zero Congestion</p>
+
+        <div class="button-group">
+            <!-- UPDATED LINKS BELOW -->
+            <a href="http://192.168.1.9:3001/" class="glass-btn" data-page="http://192.168.1.9:3001/">
+                <span style="font-size: 1.5rem;">🌤️</span>
+                <span>Weather</span>
+            </a>
+
+            <a href="http://192.168.1.9:3000/" class="glass-btn" data-page="http://192.168.1.9:3000/">
+                <div class="robot-head"></div>
+                <span>AI Chatbot</span>
+            </a>
+
+            <a href="http://127.0.0.1:5501/live%20maps.html" class="glass-btn" data-page="http://127.0.0.1:5501/live%20maps.html">
+                <span style="font-size: 1.5rem;">🗺️</span>
+                <span>Live Map</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="highway">
+        <div class="car one"></div>
+        <div class="car two"></div>
+        <div class="car three"></div>
+    </div>
+
+    <script>
+        const buttons = document.querySelectorAll('.glass-btn');
+
+        buttons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                // We don't preventDefault here anymore so the link works naturally, 
+                // but we keep the visual feedback
+                this.style.transform = "scale(0.9)";
+                
+                const targetPage = this.getAttribute('data-page');
+                console.log("Navigating to: " + targetPage);
+                
+                // If you want a delay for the animation before redirecting:
+                e.preventDefault();
+                setTimeout(() => {
+                    window.location.href = targetPage;
+                }, 150);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+{
+  "name": "Smart Traffic Assistant",
+  "description": "An AI-powered dashboard for real-time traffic analysis, route optimization, and predictive congestion insights using Gemini.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
